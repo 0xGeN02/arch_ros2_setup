@@ -12,13 +12,12 @@
     "workspaceMount": "source=${localWorkspaceFolder},target=/home/ws,type=bind",
     "customizations": {
         "vscode": {
-            "extensions":[
+            "extensions": [
+                "ms-iot.vscode-ros",
                 "ms-vscode.cpptools",
-                "ms-vscode.cpptools-themes",
-                "twxs.cmake",
-                "donjayamanne.python-extension-pack",
-                "eamodio.gitlens",
-                "ms-iot.vscode-ros"
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "ms-azuretools.vscode-docker"
             ]
         }
     },
@@ -34,8 +33,8 @@
         "-e", "DISPLAY=${env:DISPLAY}"
     ],
     "mounts": [
-       "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
-       "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached"
+        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
+        "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "sudo rosdep update && sudo rosdep install --from-paths src --ignore-src -y && sudo chown -R $(whoami) /home/ws/"
+    "postCreateCommand": "echo '127.0.0.1 xgen0-arch' | sudo tee -a /etc/hosts && sudo rosdep init && rosdep update && rosdep install --from-paths src --ignore-src -y && sudo chown -R $(whoami) /home/ws/"
 }
