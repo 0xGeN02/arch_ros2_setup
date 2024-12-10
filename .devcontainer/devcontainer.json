@@ -1,11 +1,11 @@
 {
     "name": "ROS 2 Development Container",
     "privileged": true,
-    "remoteUser": "xgen0",
+    "remoteUser": "${localEnv:USER}",
     "build": {
         "dockerfile": "Dockerfile",
         "args": {
-            "USERNAME": "xgen0"
+            "USERNAME": "${localEnv:USER}"
         }
     },
     "workspaceFolder": "/home/ws",
@@ -36,5 +36,5 @@
         "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
         "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "echo '127.0.0.1 xgen0-arch' | sudo tee -a /etc/hosts && sudo rosdep init && rosdep update && rosdep install --from-paths src --ignore-src -y && sudo chown -R $(whoami) /home/ws/"
+    "postCreateCommand": "mkdir -p /home/ws/src && echo '127.0.0.1 ${localEnv:USER}-arch' | sudo tee -a /etc/hosts && sudo rosdep init && rosdep update && rosdep install --from-path /home/ws/src --ignore-src -y && sudo chown -R $(whoami) /home/ws/"
 }

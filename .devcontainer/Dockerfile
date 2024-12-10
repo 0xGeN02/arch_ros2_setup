@@ -1,5 +1,5 @@
 # Usa la versión de Ubuntu 22.04
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 # Variables de entorno
 ENV DEBIAN_FRONTEND=noninteractive
@@ -18,7 +18,7 @@ RUN apt-get update && \
         && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
         && rm -rf /var/lib/apt/lists/*
 
-# Instalar ROS2:rolling
+# Instalar ROS2:Rolling
 RUN apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository universe && \
@@ -30,11 +30,20 @@ RUN apt-get update && \
     apt-get install -y ros-dev-tools ros-rolling-desktop ros-rolling-ros-base && \
     rm -rf /var/lib/apt/lists/*
 
+# Instalar Gazebo Harmonic
+RUN apt-get update && \
+    apt-get install -y curl lsb-release gnupg && \
+    curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null && \
+    apt-get update && \
+    apt-get install -y gz-harmonic && \
+    rm -rf /var/lib/apt/lists/*
+
 # Configura el entorno de ROS 2
 RUN echo "source /opt/ros/rolling/setup.bash" >> /etc/bash.bashrc
 
 # Argumentos para el nombre de usuario y UID/GID
-ARG USERNAME=xgen0
+ARG USERNAME
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
